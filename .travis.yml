@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - stable
+install:
+  - yarn
+script:
+  - yarn run tsc
+  - yarn run lint
+  - yarn run prettier:check
+  - yarn run test
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -e TRAVIS_NODE_VERSION

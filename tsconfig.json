@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react-native",
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "noEmitOnError": true,
+    "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
+    "outDir": "./lib",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext",
+    "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],                       /* List of folders to include type definitions from. */
+  },
+  "include": [
+    "src/**/*",
+    "declarations.d.ts",
+    "libs.d.ts",
+    "react-native.config.js"
+  ],
+  "exclude": ["node_modules", "**/__tests__/*", "coverage", "babel.config.js"]
+}
