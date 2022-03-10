@@ -16,7 +16,8 @@ public class SimCardsManagerPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new SimCardsManagerModule(reactContext));
+      modules.add(new SimCardsManagerModule(reactContext));
+      modules.add(new ESimHandlerModule(reactContext));
         return modules;
     }
 
