@@ -70,7 +70,12 @@ public class ESimHandlerModule extends ReactContextBaseJavaModule {
           return;
         }
         int resultCode = getResultCode();
-        if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK){
+        if(resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
+          // Resolvable error, attempt to resolve it by a user action
+          promise.resolve(3);
+          PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3, Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
+          mgr.startResolutionActivity(mReactContext.currentActivity, 3, intent, callbackIntent);
+        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK){
           promise.resolve(2);
         } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR){
           // Embedded Subscription Error
