@@ -10,8 +10,8 @@ RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
     if (@available(iOS 12.0, *)) {
         NSDictionary *providers = [networkInfo serviceSubscriberCellularProviders];
         
-        for (NSString *aKey in providers) {
-            CTCarrier *aCarrier = providers[aKey];
+        for (NSString *aProvider in providers) {
+            CTCarrier *aCarrier = providers[aProvider];
             bool allowsVOIP = [aCarrier allowsVOIP];
             NSString *carrierName = [aCarrier carrierName];
             NSString *isoCountryCode = [aCarrier isoCountryCode];
