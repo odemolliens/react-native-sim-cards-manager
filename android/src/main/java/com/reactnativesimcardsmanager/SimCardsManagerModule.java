@@ -37,7 +37,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @ReactMethod
     public void getSimCards(Promise promise) {
-        final Map<String, Object> constants = new HashMap<>();
+        WritableArray simCardsList = new WritableNativeArray();
 
         TelephonyManager telManager = (TelephonyManager) this.reactContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -48,8 +48,9 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
                 List<SubscriptionInfo> subscriptionInfos = manager.getActiveSubscriptionInfoList();
 
-                int sub = 0;
                 for (SubscriptionInfo subInfo : subscriptionInfos) {
+                    WritableMap simCard = Arguments.createMap();
+
                     CharSequence carrierName = subInfo.getCarrierName();
                     String countryIso = subInfo.getCountryIso();
                     int dataRoaming = subInfo.getDataRoaming();  // 1 is enabled ; 0 is disabled
@@ -66,28 +67,29 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
                         deviceId = telManager.getDeviceId(simSlotIndex);
                     }
 
-                    constants.put("carrierName" + sub, carrierName.toString());
-                    constants.put("displayName" + sub, displayName.toString());
-                    constants.put("countryCode" + sub, countryIso);
-                    constants.put("mcc" + sub, mcc);
-                    constants.put("mnc" + sub, mnc);
-                    constants.put("isNetworkRoaming" + sub, networkRoaming);
-                    constants.put("isDataRoaming" + sub, (dataRoaming == 1));
-                    constants.put("simSlotIndex" + sub, simSlotIndex);
-                    constants.put("phoneNumber" + sub, number);
-                    constants.put("deviceId" + sub, deviceId);
-                    constants.put("simSerialNumber" + sub, iccId);
-                    constants.put("subscriptionId" + sub, subscriptionId);
-                    sub++;
+                    simCard.putString("carrierName", carrierName.toString());
+                    simCard.putString("displayName", displayName.toString());
+                    simCard.putString("isoCountryCode", countryIso);
+                    simCard.putString("mobileCountryCode", mcc);
+                    simCard.putString("mobileNetworkCode", mnc);
+                    simCard.putString("isNetworkRoaming", networkRoaming);
+                    simCard.putString("isDataRoaming", (dataRoaming == 1));
+                    simCard.putString("simSlotIndex", simSlotIndex);
+                    simCard.putString("phoneNumber", number);
+                    simCard.putString("deviceId", deviceId);
+                    simCard.putString("simSerialNumber", iccId);
+                    simCard.putString("subscriptionId", subscriptionId);
+
+                    simCardsList.pushMap(simCard);
                 }
             }
             else{
-                constants.put("phoneNumber0", telManager.getLine1Number());
+                promise.resolve(0);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            promise.resolve(0);
         }
-        promise.resolve(constants);
+        promise.resolve(simcards);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)

@@ -6,23 +6,23 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
 
+    NSMutableArray *simCardsList = [[NSMutableArray alloc]init];
+    
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc]init];
     if (@available(iOS 12.0, *)) {
         NSDictionary *providers = [networkInfo serviceSubscriberCellularProviders];
+        NSMutableDictionary *simCard = [[NSMutableDictionary alloc]init];
         
         for (NSString *aProvider in providers) {
             CTCarrier *aCarrier = providers[aProvider];
-            bool allowsVOIP = [aCarrier allowsVOIP];
-            NSString *carrierName = [aCarrier carrierName];
-            NSString *isoCountryCode = [aCarrier isoCountryCode];
-            NSString *mobileNetworkCode = [aCarrier mobileNetworkCode];
-            NSString *mobileCountryCode = [aCarrier mobileCountryCode];
+            [simCard setValue:[aCarrier allowsVOIP] forKey:@"allowsVOIP"];
+            [simCard setValue:[aCarrier carrierName] forKey:@"carrierName"];
+            [simCard setValue:[aCarrier isoCountryCode] forKey:@"isoCountryCode"];
+            [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
+            [simCard setValue:[aCarrier mobileCountryCode] forKey:@"mobileCountryCode"];
         }
         
-        NSEnumerator *e = [providers objectEnumerator];
-        if ([[e.allObjects firstObject] isKindOfClass:(CTCarrier.class)]) {
-            NSString *str = ((CTCarrier *)[e.allObjects firstObject]).isoCountryCode;
-        }
+        [simCardsList addObject: simCard];
     } else {
         NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
         reject(@"iOS 12 api availability", @"This functionality is not supported before iOS 12.0", error);
