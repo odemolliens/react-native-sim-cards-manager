@@ -24,6 +24,9 @@ import com.facebook.react.module.annotations.ReactModule;
 public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     public static final String NAME = "SimCardsManager";
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private EuiccManager mgr = (EuiccManager)mReactContext.getSystemService(EUICC_SERVICE);
+
     public SimCardsManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
@@ -84,10 +87,10 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
                 }
             }
             else{
-                promise.resolve(0);
+                promise.reject("react.native.simcardsmanager.handler", "This functionality is not supported before Android 5.1 (22)");
             }
         } catch (Exception e) {
-            promise.resolve(0);
+            promise.reject("react.native.simcardsmanager.handler", "Can't retrieve successfully simcards");
         }
         promise.resolve(simcards);
     }
@@ -107,8 +110,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setupEsim(ReadableMap config, Promise promise) {
       if (mgr == null){
-        // Could not get react context";
-        promise.resolve(0);
+        promise.reject("react.native.simcardsmanager.handler", "EuiccManager is not available");
         return;
       }
   
@@ -133,7 +135,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(1);
           } else {
             // Unknown Error
-            promise.resolve(0);
+            promise.reject("react.native.simcardsmanager.handler", "Can't retrieve successfully simcards");
           }
         }
       };
