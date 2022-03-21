@@ -60,7 +60,7 @@ const result = await multiply(3, 7);
 
 Available set of data per platform:
 
-| Platform          	| iOS 	| Android 	| Description 	|
+| Platform          	| iOS 	| Android 	| 
 |-------------------	|-----	|---------	|
 | carrierName       	|  ✅  	|    ✅    	|
 | displayName       	|  ❌  	|    ✅    	|
