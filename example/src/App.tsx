@@ -21,33 +21,59 @@ export default function App() {
   const [confirmationCode, setConfirmationCode] = useState('');
   const scrollViewRef = useRef<any>();
 
-  const callBridge = async (command: string, method: any, params?: any) => {
+  const getSimCards = async () => {
     let result;
     try {
-      result = params ? await method(params) : await method();
+      result = await SimCardsManagerModule.getSimCards();
     } catch (e) {
       result = e;
     } finally {
       setLogs([
         ...logs,
         {
-          command,
+          command: 'getSimCards',
           result: JSON.stringify(result, null, 5),
         },
       ]);
     }
   };
 
-  const getSimCards = () => callBridge('getSimCards', SimCardsManagerModule.getSimCards);
+  const isEsimSupported = async () => {
+    let result;
+    try {
+      result = await SimCardsManagerModule.isEsimSupported();
+    } catch (e) {
+      result = e;
+    } finally {
+      setLogs([
+        ...logs,
+        {
+          command: 'isEsimSupported',
+          result: JSON.stringify(result, null, 5),
+        },
+      ]);
+    }
+  };
 
-  const isEsimSupported = () =>
-    callBridge('isEsimSupported', SimCardsManagerModule.isEsimSupported);
-
-  const setupEsim = async () =>
-    callBridge(`setupEsim (${confirmationCode})`, SimCardsManagerModule.setupEsim, {
-      confirmationCode,
-      address: '',
-    });
+  const setupEsim = async () => {
+    let result;
+    try {
+      result = await SimCardsManagerModule.setupEsim({
+        confirmationCode,
+        address: '',
+      });
+    } catch (e) {
+      result = e;
+    } finally {
+      setLogs([
+        ...logs,
+        {
+          command: `setupEsim (${confirmationCode})`,
+          result: JSON.stringify(result, null, 5),
+        },
+      ]);
+    }
+  };
 
   return (
     <SafeAreaView>
