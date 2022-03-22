@@ -10,6 +10,10 @@ import android.telephony.euicc.DownloadableSubscription;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.content.BroadcastReceiver;
+import android.telephony.TelephonyManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,15 +24,20 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
+import java.util.List;
+
 @ReactModule(name = SimCardsManagerModule.NAME)
 public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     public static final String NAME = "SimCardsManager";
+    private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+    private ReactContext mReactContext;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private EuiccManager mgr = (EuiccManager)mReactContext.getSystemService(EUICC_SERVICE);
 
     public SimCardsManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        mReactContext = reactContext;
     }
 
     @Override
@@ -42,9 +51,9 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     public void getSimCards(Promise promise) {
         WritableArray simCardsList = new WritableNativeArray();
 
-        TelephonyManager telManager = (TelephonyManager) this.reactContext.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telManager = (TelephonyManager) mReactContext.getSystemService(Context.TELEPHONY_SERVICE);
         try {
-            SubscriptionManager manager = (SubscriptionManager) this.reactContext.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+            SubscriptionManager manager = (SubscriptionManager) mReactContext.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
                 int activeSubscriptionInfoCount = manager.getActiveSubscriptionInfoCount();
                 int activeSubscriptionInfoCountMax = manager.getActiveSubscriptionInfoCountMax();
@@ -64,7 +73,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
                     String number = subInfo.getNumber();
                     int simSlotIndex = subInfo.getSimSlotIndex();
                     int subscriptionId = subInfo.getSubscriptionId();
-                    boolean networkRoaming = telManager.isNetworkRoaming();
+                    int networkRoaming = telManager.isNetworkRoaming()? 1 : 0;
                     String deviceId = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                         deviceId = telManager.getDeviceId(simSlotIndex);
@@ -73,15 +82,15 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
                     simCard.putString("carrierName", carrierName.toString());
                     simCard.putString("displayName", displayName.toString());
                     simCard.putString("isoCountryCode", countryIso);
-                    simCard.putString("mobileCountryCode", mcc);
-                    simCard.putString("mobileNetworkCode", mnc);
-                    simCard.putString("isNetworkRoaming", networkRoaming);
-                    simCard.putString("isDataRoaming", (dataRoaming == 1));
-                    simCard.putString("simSlotIndex", simSlotIndex);
+                    simCard.putInt("mobileCountryCode", mcc);
+                    simCard.putInt("mobileNetworkCode", mnc);
+                    simCard.putInt("isNetworkRoaming", networkRoaming);
+                    simCard.putInt("isDataRoaming", dataRoaming);
+                    simCard.putInt("simSlotIndex", simSlotIndex);
                     simCard.putString("phoneNumber", number);
                     simCard.putString("deviceId", deviceId);
                     simCard.putString("simSerialNumber", iccId);
-                    simCard.putString("subscriptionId", subscriptionId);
+                    simCard.putInt("subscriptionId", subscriptionId);
 
                     simCardsList.pushMap(simCard);
                 }
@@ -92,7 +101,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         } catch (Exception e) {
             promise.reject("react.native.simcardsmanager.handler", "Can't retrieve successfully simcards");
         }
-        promise.resolve(simcards);
+        promise.resolve(simCardsList);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -126,8 +135,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           if(resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
             // Resolvable error, attempt to resolve it by a user action
             promise.resolve(3);
-            PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3, Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
-            mgr.startResolutionActivity(mReactContext.currentActivity, 3, intent, callbackIntent);
+            PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3, new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
+            mgr.startResolutionActivity(mReactContext.getCurrentActivity(), 3, intent, callbackIntent);
           } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK){
             promise.resolve(2);
           } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR){
