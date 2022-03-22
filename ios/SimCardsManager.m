@@ -21,7 +21,7 @@ RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         
         for (NSString *aProvider in providers) {
             CTCarrier *aCarrier = providers[aProvider];
-            [simCard setValue:[NSString stringWithFormat:@"%@",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
+            [simCard setValue:[NSString stringWithFormat:@"%i",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
             [simCard setValue:[aCarrier carrierName] forKey:@"carrierName"];
             [simCard setValue:[aCarrier isoCountryCode] forKey:@"isoCountryCode"];
             [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
@@ -29,6 +29,7 @@ RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         }
         
         [simCardsList addObject: simCard];
+        resolve(simCardsList);
     } else {
         NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
         reject(@"iOS 12 api availability", @"This functionality is not supported before iOS 12.0", error);
