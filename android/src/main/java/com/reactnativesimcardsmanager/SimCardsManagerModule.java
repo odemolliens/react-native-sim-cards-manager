@@ -33,11 +33,12 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     private ReactContext mReactContext;
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    private EuiccManager mgr = (EuiccManager)mReactContext.getSystemService(EUICC_SERVICE);
+    private EuiccManager mgr; 
 
     public SimCardsManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mReactContext = reactContext;
+        mgr = (EuiccManager)mReactContext.getSystemService(EUICC_SERVICE);
     }
 
     @Override
