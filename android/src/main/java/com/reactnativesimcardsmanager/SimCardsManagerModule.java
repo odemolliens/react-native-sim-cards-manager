@@ -131,12 +131,17 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(0);
             return;
           }
+
           int resultCode = getResultCode();
           if(resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
-            // Resolvable error, attempt to resolve it by a user action
-            promise.resolve(3);
-            PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3, new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
-            mgr.startResolutionActivity(mReactContext.getCurrentActivity(), 3, intent, callbackIntent);
+            try {
+              // Resolvable error, attempt to resolve it by a user action
+              promise.resolve(3);
+              PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3, new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
+              mgr.startResolutionActivity(mReactContext.getCurrentActivity(), 3, intent, callbackIntent);
+            } catch (Exception e) {
+              promise.reject("react.native.simcardsmanager.handler", "Can't setup eSim du to Activity error");
+            }
           } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK){
             promise.resolve(2);
           } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR){
@@ -144,7 +149,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
             promise.resolve(1);
           } else {
             // Unknown Error
-            promise.reject("react.native.simcardsmanager.handler", "Can't retrieve successfully simcards");
+            promise.reject("react.native.simcardsmanager.handler", "Can't setup eSim du to unknown error");
           }
         }
       };
