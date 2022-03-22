@@ -29,7 +29,8 @@
     "lint:fix": "yarn run lint --fix",
     "prettier:check": "prettier --config ./.prettierrc --check \"src*/**/*.tsx\" ",
     "prettier:fix": "prettier --config ./.prettierrc --write --check \"src*/**/*.tsx\" ",
-    "pods": "cd example && pod-install --quiet"
+    "pods": "cd example && pod-install --quiet",
+    "example": "yarn --cwd example"
   },
   "keywords": [
     "react-native",
