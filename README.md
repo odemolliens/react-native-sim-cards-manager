@@ -50,7 +50,7 @@ const result = await multiply(3, 7);
 
 #### Get sim cards
 
-The list can be empty (no simcards detected) or one/many elements
+The list can be empty (no simcards detected) or one/many element(s)
 
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
@@ -93,6 +93,15 @@ const result = await multiply(3, 7);
 #### Setup eSim with an activation code
 
 Doc: TODO
+
+| Entry parameters 	| Mandatory 	| Description                                                                                                     	|
+|------------------	|-----------	|-----------------------------------------------------------------------------------------------------------------	|
+| address          	|    true   	| The address of the carrier network’s eSIM server                                                                	|
+| confirmationCode 	|   false   	| The provisioning request’s confirmation code, provided by the network operator when initiating an eSIM download 	|
+| iccid            	|   false   	| The provisioning request’s eUICC identifier                                                                     	|
+| address          	|   false   	| The provisioning request’s Integrated Circuit Card Identifier                                                   	|
+| matchingId       	|   false   	| The provisioning request’s matching identifier                                                                  	|
+| oid              	|   false   	| The provisioning request’s Object Identifier                                                                    	|
 
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
