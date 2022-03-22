@@ -24,6 +24,7 @@
    LearnMoreLinks,
    ReloadInstructions,
  } from 'react-native/Libraries/NewAppScreen';
+ import { SimManager } from "react-native-sim-cards-manager";
  
  const Section = ({children, title}: any): any => {
    const isDarkMode = useColorScheme() === 'dark';

@@ -6,7 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const SimCardsManager = NativeModules.SimCardsManager
+const SimCardsManagerModule = NativeModules.SimCardsManager
   ? NativeModules.SimCardsManager
   : new Proxy(
       {},
@@ -17,6 +17,26 @@ const SimCardsManager = NativeModules.SimCardsManager
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return SimCardsManager.multiply(a, b);
+export type EsimConfig = {
+  address: string;
+  confirmationCode?: string;
+  eid?: string;
+  iccid?: string;
+  matchingId?: string;
+  oid?: string;
+};
+
+export enum EsimResultStatus {
+  Unknown = 0,
+  Fail = 1,
+  Success = 2,
 }
+
+
+type SimManager = {
+  getSimCards(): Promise<boolean | never>;
+  setupEsim(config: EsimConfig): Promise<EsimResultStatus | never>;
+  isEsimSupported(): Promise<boolean | never>;
+};
+
+export default SimCardsManagerModule as SimManager;

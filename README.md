@@ -39,7 +39,7 @@ Note: At the moment *(iOS 14.2)* there might a bug in iOS SDK which returns ukno
 
 
 ```ts
-import { multiply } from "react-native-sim-cards-manager";
+import { SimManager } from "react-native-sim-cards-manager";
 
 // ...
 
@@ -51,7 +51,7 @@ const result = await multiply(3, 7);
 #### Get sim cards
 
 ```ts
-import { multiply } from "react-native-sim-cards-manager";
+import { SimManager } from "react-native-sim-cards-manager";
 
 // ...
 
@@ -79,7 +79,7 @@ Available set of data per platform:
 #### Esim supported
 
 ```ts
-import { multiply } from "react-native-sim-cards-manager";
+import { SimManager } from "react-native-sim-cards-manager";
 
 // ...
 
@@ -89,7 +89,7 @@ const result = await multiply(3, 7);
 #### Setup eSim with an activation code
 
 ```ts
-import { multiply } from "react-native-sim-cards-manager";
+import { SimManager } from "react-native-sim-cards-manager";
 
 // ...
 
