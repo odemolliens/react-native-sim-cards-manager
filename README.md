@@ -50,6 +50,8 @@ const result = await multiply(3, 7);
 
 #### Get sim cards
 
+The list can be empty (no simcards detected) or one/many elements
+
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
@@ -78,6 +80,8 @@ Available set of data per platform:
 
 #### Esim supported
 
+Return true/false is the device support eSim
+
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
@@ -88,6 +92,8 @@ const result = await multiply(3, 7);
 
 #### Setup eSim with an activation code
 
+Doc: TODO
+
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
@@ -95,6 +101,18 @@ import { SimManager } from "react-native-sim-cards-manager";
 
 const result = await multiply(3, 7);
 ```
+
+
+## Changelog
+
+### 1.0.0
+- First stable release
+
+### 0.9.9
+- iOS implementation
+- Android implementation
+- RN implementation
+- Documentation & sample project
 
 ## Contributing
 
