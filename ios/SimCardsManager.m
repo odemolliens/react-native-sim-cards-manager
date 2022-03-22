@@ -1,5 +1,11 @@
 #import "SimCardsManager.h"
 
+#import<CoreTelephony/CTCallCenter.h>
+#import<CoreTelephony/CTCall.h>
+#import<CoreTelephony/CTCarrier.h>
+#import<CoreTelephony/CTTelephonyNetworkInfo.h>
+#import<CoreTelephony/CTCellularPlanProvisioning.h>
+
 @implementation SimCardsManager
 
 RCT_EXPORT_MODULE()
@@ -15,7 +21,7 @@ RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         
         for (NSString *aProvider in providers) {
             CTCarrier *aCarrier = providers[aProvider];
-            [simCard setValue:[aCarrier allowsVOIP] forKey:@"allowsVOIP"];
+            [simCard setValue:[NSString stringWithFormat:@"%@",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
             [simCard setValue:[aCarrier carrierName] forKey:@"carrierName"];
             [simCard setValue:[aCarrier isoCountryCode] forKey:@"isoCountryCode"];
             [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
