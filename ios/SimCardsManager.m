@@ -29,22 +29,25 @@ RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromi
         }
         
         [simCardsList addObject: simCard];
-        resolve(simCardsList);
+        
     } else {
         //Support for older version, can return only 1 simcard in the list (subscriberCellularProvider)
         NSMutableDictionary *simCard = [[NSMutableDictionary alloc]init];
         
         CTTelephonyNetworkInfo *nInfo = [[CTTelephonyNetworkInfo alloc] init];
         CTCarrier *aCarrier = [nInfo subscriberCellularProvider];
-        [simCard setValue:[NSString stringWithFormat:@"%i",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
-        [simCard setValue:[aCarrier carrierName] forKey:@"carrierName"];
-        [simCard setValue:[aCarrier isoCountryCode] forKey:@"isoCountryCode"];
-        [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
-        [simCard setValue:[aCarrier mobileCountryCode] forKey:@"mobileCountryCode"];
         
-        [simCardsList addObject: simCard];
-        resolve(simCardsList);
+        //Catch no-sim case
+        if([aCarrier isoCountryCode] != nil){
+            [simCard setValue:[NSString stringWithFormat:@"%i",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
+            [simCard setValue:[aCarrier carrierName] forKey:@"carrierName"];
+            [simCard setValue:[aCarrier isoCountryCode] forKey:@"isoCountryCode"];
+            [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
+            [simCard setValue:[aCarrier mobileCountryCode] forKey:@"mobileCountryCode"];
+            [simCardsList addObject: simCard];
+        }
     }
+    resolve(simCardsList);
 }
 
 RCT_EXPORT_METHOD(isEsimSupported:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
