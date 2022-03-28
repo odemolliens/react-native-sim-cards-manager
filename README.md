@@ -109,7 +109,7 @@ Error code that can be returned by the bridge:
 |--------------	|-----------------------------------------------------------------------------------	|
 | 0            	| Feature not available for that OS / device                                        	|
 | 1            	| The device doesn't support a cellular plan                                        	|
-| 2            	| The provisioning request’s eUICC identifier                                       	|
+| 2            	| The OS failed to add the new plan                                    	|
 | 3 **(iOS)**    	| The OS has returned an unknow error                                               	|
 | 3 **(Android)** 	| The OS has returned an error **or** something goes wrong with the Intent/Activity 	|
 ```ts

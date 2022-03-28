@@ -26,15 +26,9 @@ export type EsimConfig = {
   oid?: string;
 };
 
-export enum EsimResultStatus {
-  Unknown = 0,
-  Fail = 1,
-  Success = 2,
-}
-
 type SimManager = {
   getSimCards(): Promise<Array<any>>;
-  setupEsim(config: EsimConfig): Promise<EsimResultStatus | never>;
+  setupEsim(config: EsimConfig): Promise<boolean | never>;
   isEsimSupported(): Promise<boolean | never>;
 };
 
