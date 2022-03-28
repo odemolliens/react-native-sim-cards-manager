@@ -33,6 +33,8 @@ Add in your Android Manifest:
 
 **This API won't work without eSIM entitlement. You can read more about it [here](https://stackoverflow.com/a/60162323)**
 
+**Minimum API Level is 12 for eSIM methods**
+
 Note: At the moment *(iOS 14.2)* there might a bug in iOS SDK which returns uknown result before eSIM setup completion. More about it [here](https://developer.apple.com/forums/thread/662001)
 
 ## Usage
