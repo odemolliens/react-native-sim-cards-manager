@@ -126,7 +126,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     }
     
     if (mgr == null) {
-      promise.reject("1", "EuiccManager is not available");
+      promise.reject("1", "The device doesn't support a cellular plan (EuiccManager is not available)");
       return;
     }
 

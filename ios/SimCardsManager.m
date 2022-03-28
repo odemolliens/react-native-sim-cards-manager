@@ -57,7 +57,7 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
         
         if (plan.supportsCellularPlan != YES) {
             NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:2 userInfo:nil];
-            reject(@"1", @"Doesn't support cellular plan", error);
+            reject(@"1", @"The device doesn't support a cellular plan", error);
         } else {
             CTCellularPlanProvisioningRequest *request = [[CTCellularPlanProvisioningRequest alloc] init];
             request.OID = config[@"oid"];

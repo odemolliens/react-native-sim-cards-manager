@@ -92,7 +92,7 @@ const result = await multiply(3, 7);
 
 #### Setup eSim with an activation code
 
-Doc: TODO
+Entry parameters for the bridge:
 
 | Entry parameters 	| Mandatory 	| Description                                                                                                     	|
 |------------------	|-----------	|-----------------------------------------------------------------------------------------------------------------	|
@@ -103,6 +103,15 @@ Doc: TODO
 | matchingId       	|   false   	| The provisioning request’s matching identifier                                                                  	|
 | oid              	|   false   	| The provisioning request’s Object Identifier                                                                    	|
 
+Error code that can be returned by the bridge:
+
+| Error code   	| Description                                                                       	|
+|--------------	|-----------------------------------------------------------------------------------	|
+| 0            	| Feature not available for that OS / device                                        	|
+| 1            	| The device doesn't support a cellular plan                                        	|
+| 2            	| The provisioning request’s eUICC identifier                                       	|
+| 3 **(iOS)**    	| The OS has returned an unknow error                                               	|
+| 3 **(Android)** 	| The OS has returned an error **or** something goes wrong with the Intent/Activity 	|
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
