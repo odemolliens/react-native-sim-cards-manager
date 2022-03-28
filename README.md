@@ -37,18 +37,7 @@ Note: At the moment *(iOS 14.2)* there might a bug in iOS SDK which returns ukno
 
 ## Usage
 
-
-```ts
-import { SimManager } from "react-native-sim-cards-manager";
-
-// ...
-
-const result = await multiply(3, 7);
-```
-
-### Methods
-
-#### Get sim cards
+### Get sim cards
 
 The list can be empty (no simcards detected) or one/many element(s)
 
@@ -78,9 +67,9 @@ Available set of data per platform:
 | subscriptionId    	|  ❌  	|    ✅    	|
 | allowsVOIP        	|  ✅  	|    ❌    	|
 
-#### Esim supported
+### Esim is supported
 
-Return true/false is the device support eSim
+Return true/false is the device support eSim feature
 
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
@@ -90,7 +79,7 @@ import { SimManager } from "react-native-sim-cards-manager";
 const result = await multiply(3, 7);
 ```
 
-#### Setup eSim with an activation code
+### Setup eSim with an activation code
 
 Entry parameters for the bridge:
 
