@@ -21,58 +21,67 @@ export default function App() {
   const [confirmationCode, setConfirmationCode] = useState('');
   const scrollViewRef = useRef<any>();
 
-  const getSimCards = async () => {
-    let result;
-    try {
-      result = await SimCardsManagerModule.getSimCards();
-    } catch (e) {
-      result = e;
-    } finally {
+  const getSimCards = () => {
+    SimCardsManagerModule.getSimCards().then((array: Array<any>)=>{
       setLogs([
         ...logs,
         {
           command: 'getSimCards',
-          result: JSON.stringify(result, null, 5),
+          result: JSON.stringify(array, null, 5),
         },
       ]);
-    }
+    }).catch((error)=>{
+      setLogs([
+        ...logs,
+        {
+          command: 'getSimCardsError',
+          result: JSON.stringify(error, null, 5),
+        },
+      ]);
+    })
   };
 
-  const isEsimSupported = async () => {
-    let result;
-    try {
-      result = await SimCardsManagerModule.isEsimSupported();
-    } catch (e) {
-      result = e;
-    } finally {
+  const isEsimSupported = () => {
+    SimCardsManagerModule.isEsimSupported().then((isSupported: boolean)=>{
       setLogs([
         ...logs,
         {
           command: 'isEsimSupported',
-          result: JSON.stringify(result, null, 5),
+          result: JSON.stringify(isSupported, null, 5),
         },
       ]);
-    }
-  };
-
-  const setupEsim = async () => {
-    let result;
-    try {
-      result = await SimCardsManagerModule.setupEsim({
-        confirmationCode,
-        address: '',
-      });
-    } catch (e) {
-      result = e;
-    } finally {
+    }).catch((error)=>{
       setLogs([
         ...logs,
         {
-          command: `setupEsim (${confirmationCode})`,
-          result: JSON.stringify(result, null, 5),
+          command: 'isEsimSupportedError',
+          result: JSON.stringify(error, null, 5),
         },
       ]);
-    }
+    })
+  };
+
+  const setupEsim = () => {
+    SimCardsManagerModule.setupEsim({
+      confirmationCode,
+      address: '',
+    }).then((isPlanAdded: boolean)=>{
+      setLogs([
+        ...logs,
+        {
+          command: 'setupEsim',
+          result: JSON.stringify(isPlanAdded, null, 5),
+        },
+      ]);
+    }).catch((error)=>{
+      setLogs([
+        ...logs,
+        {
+          command: 'setupEsimError',
+          result: JSON.stringify(error, null, 5),
+        },
+      ]);
+    })
   };
 
   return (
@@ -102,7 +111,7 @@ export default function App() {
           <Button title={'Get sim cards'} onPress={getSimCards}></Button>
         </View>
         <View style={styles.button}>
-          <Button title={'Is Esim supported'} onPress={isEsimSupported}></Button>
+          <Button title={'Is Esim supported?'} onPress={isEsimSupported}></Button>
         </View>
         <View style={styles.activateEsimContainer}>
           <TextInput style={styles.textInput} onChangeText={setConfirmationCode}></TextInput>

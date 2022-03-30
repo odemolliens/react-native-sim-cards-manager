@@ -85,13 +85,13 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
             [plan addPlanWith:request completionHandler:^(CTCellularPlanProvisioningAddPlanResult result) {
                 if (result==CTCellularPlanProvisioningAddPlanResultFail){
                     NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
-                    reject(@"2", @"CTCellularPlanProvisioningAddPlanResultFail -  Can't add an Esim subscription, error);
+                    reject(@"2", @"CTCellularPlanProvisioningAddPlanResultFail -  Can't add an Esim subscription", error);
                 }else if (result==CTCellularPlanProvisioningAddPlanResultUnknown){
                     NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
                     reject(@"3", @"CTCellularPlanProvisioningAddPlanResultUnknown - Can't setup eSim due to unknown error", error);
                 }else{
                     //CTCellularPlanProvisioningAddPlanResultSuccess
-                    resolve(true);
+                    resolve(@(true));
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
             }];
@@ -102,5 +102,5 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
         reject(@"0", @"This functionality is not supported before iOS 12.0", error);
     }
 }
-!
+
 @end

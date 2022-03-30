@@ -87,12 +87,12 @@ Entry parameters for the bridge:
 
 | Entry parameters 	| Mandatory 	| Description                                                                                                     	|
 |------------------	|-----------	|-----------------------------------------------------------------------------------------------------------------	|
-| address          	|    true   	| The address of the carrier network’s eSIM server                                                                	|
-| confirmationCode 	|   false   	| The provisioning request’s confirmation code, provided by the network operator when initiating an eSIM download 	|
-| iccid            	|   false   	| The provisioning request’s eUICC identifier                                                                     	|
-| address          	|   false   	| The provisioning request’s Integrated Circuit Card Identifier                                                   	|
-| matchingId       	|   false   	| The provisioning request’s matching identifier                                                                  	|
-| oid              	|   false   	| The provisioning request’s Object Identifier                                                                    	|
+| address          	|     N/A   	| The address of the carrier network’s eSIM server                                                                	|
+| confirmationCode 	|     N/A   	| The provisioning request’s confirmation code, provided by the network operator when initiating an eSIM download 	|
+| iccid            	|     N/A   	| The provisioning request’s eUICC identifier                                                                     	|
+| address          	|     N/A   	| The provisioning request’s Integrated Circuit Card Identifier                                                   	|
+| matchingId       	|     N/A   	| The provisioning request’s matching identifier                                                                  	|
+| oid              	|     N/A   	| The provisioning request’s Object Identifier                                                                    	|
 
 Error code that can be returned by the bridge:
 
