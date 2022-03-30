@@ -46,9 +46,11 @@ The list can be empty (no simcards detected) or one/many element(s)
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
-// ...
-
-const result = await multiply(3, 7);
+SimCardsManagerModule.getSimCards().then((array: Array<any>)=>{
+    //
+}).catch((error)=>{
+    //
+})
 ```
 
 Available set of data per platform:
@@ -76,9 +78,11 @@ Return true/false is the device support eSim feature
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
-// ...
-
-const result = await multiply(3, 7);
+SimCardsManagerModule.isEsimSupported().then((isSupported: boolean)=>{
+    //
+}).catch((error)=>{
+    //
+})
 ```
 
 ### Setup eSim with an activation code
@@ -100,15 +104,19 @@ Error code that can be returned by the bridge:
 |--------------	|-----------------------------------------------------------------------------------	|
 | 0            	| Feature not available for that OS / device                                        	|
 | 1            	| The device doesn't support a cellular plan                                        	|
-| 2            	| The OS failed to add the new plan                                    	|
+| 2            	| The OS failed to add the new plan                                                 	|
 | 3 **(iOS)**    	| The OS has returned an unknow error                                               	|
 | 3 **(Android)** 	| The OS has returned an error **or** something goes wrong with the Intent/Activity 	|
 ```ts
 import { SimManager } from "react-native-sim-cards-manager";
 
-// ...
-
-const result = await multiply(3, 7);
+SimCardsManagerModule.setupEsim({
+    confirmationCode, address: '',
+}).then((isPlanAdded: boolean)=>{
+  //
+}).catch((error)=>{
+  //
+})
 ```
 
 

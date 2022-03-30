@@ -1,6 +1,6 @@
 {
   "name": "react-native-sim-cards-manager",
-  "version": "0.9.9",
+  "version": "1.0.0",
   "description": "react-native-sim-cards-manager description",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
