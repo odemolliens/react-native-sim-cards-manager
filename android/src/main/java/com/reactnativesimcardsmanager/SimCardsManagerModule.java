@@ -39,7 +39,13 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   public SimCardsManagerModule(ReactApplicationContext reactContext) {
     super(reactContext);
     mReactContext = reactContext;
-    mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.P)
+  private void initMgr() {
+    if(mgr == null) {
+        mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
+    }
   }
 
   @Override
@@ -109,6 +115,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void isEsimSupported(Promise promise) {
+    initMgr();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mgr != null) {
       promise.resolve(mgr.isEnabled());
     } else {
@@ -120,7 +127,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void setupEsim(ReadableMap config, Promise promise) {
-
+    initMgr();
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
       promise.reject("0", "EuiccManager is not available or before Android 9 (API 28)");
     }

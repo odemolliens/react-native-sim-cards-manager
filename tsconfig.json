@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "paths": {
       "react-native-sim-cards-manager": ["./src/index"]
     },
