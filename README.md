@@ -122,6 +122,9 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.1
+- Android bug fixes
+
 ### 1.0.0
 - First stable release
 
