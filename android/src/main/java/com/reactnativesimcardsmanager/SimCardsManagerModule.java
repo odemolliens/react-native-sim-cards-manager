@@ -77,10 +77,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           int simSlotIndex = subInfo.getSimSlotIndex();
           int subscriptionId = subInfo.getSubscriptionId();
           int networkRoaming = telManager.isNetworkRoaming() ? 1 : 0;
-          String deviceId = null;
-          if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            deviceId = telManager.getDeviceId(simSlotIndex);
-          }
 
           simCard.putString("carrierName", carrierName.toString());
           simCard.putString("displayName", displayName.toString());
@@ -91,7 +87,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           simCard.putInt("isDataRoaming", dataRoaming);
           simCard.putInt("simSlotIndex", simSlotIndex);
           simCard.putString("phoneNumber", number);
-          simCard.putString("deviceId", deviceId);
           simCard.putString("simSerialNumber", iccId);
           simCard.putInt("subscriptionId", subscriptionId);
 
