@@ -121,9 +121,12 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
-### 1.0.1
+### 1.0.2
 - Remove 'deviceID' on Android because it require high privilege
 - Adding permission management on Android (READ_PHONE_STATE)
+
+### 1.0.1
+- Android bug fixes
 
 ### 1.0.0
 - First stable release
