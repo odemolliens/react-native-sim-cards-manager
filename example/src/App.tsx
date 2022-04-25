@@ -22,66 +22,72 @@ export default function App() {
   const scrollViewRef = useRef<any>();
 
   const getSimCards = () => {
-    SimCardsManagerModule.getSimCards().then((array: Array<any>)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'getSimCards',
-          result: JSON.stringify(array, null, 5),
-        },
-      ]);
-    }).catch((error)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'getSimCardsError',
-          result: JSON.stringify(error, null, 5),
-        },
-      ]);
-    })
+    SimCardsManagerModule.getSimCards()
+      .then((array: Array<any>) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'getSimCards',
+            result: JSON.stringify(array, null, 5),
+          },
+        ]);
+      })
+      .catch((error: any) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'getSimCardsError',
+            result: JSON.stringify(error, null, 5),
+          },
+        ]);
+      });
   };
 
   const isEsimSupported = () => {
-    SimCardsManagerModule.isEsimSupported().then((isSupported: boolean)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'isEsimSupported',
-          result: JSON.stringify(isSupported, null, 5),
-        },
-      ]);
-    }).catch((error)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'isEsimSupportedError',
-          result: JSON.stringify(error, null, 5),
-        },
-      ]);
-    })
+    SimCardsManagerModule.isEsimSupported()
+      .then((isSupported: boolean) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'isEsimSupported',
+            result: JSON.stringify(isSupported, null, 5),
+          },
+        ]);
+      })
+      .catch((error: any) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'isEsimSupportedError',
+            result: JSON.stringify(error, null, 5),
+          },
+        ]);
+      });
   };
 
   const setupEsim = () => {
     SimCardsManagerModule.setupEsim({
       confirmationCode,
       address: '',
-    }).then((isPlanAdded: boolean)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'setupEsim',
-          result: JSON.stringify(isPlanAdded, null, 5),
-        },
-      ]);
-    }).catch((error)=>{
-      setLogs([
-        ...logs,
-        {
-          command: 'setupEsimError',
-          result: JSON.stringify(error, null, 5),
-        },
-      ]);
     })
+      .then((isPlanAdded: boolean) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'setupEsim',
+            result: JSON.stringify(isPlanAdded, null, 5),
+          },
+        ]);
+      })
+      .catch((error: any) => {
+        setLogs([
+          ...logs,
+          {
+            command: 'setupEsimError',
+            result: JSON.stringify(error, null, 5),
+          },
+        ]);
+      });
   };
 
   return (
