@@ -66,7 +66,6 @@ Available set of data per platform:
 | isDataRoaming     	|  ❌  	|    ✅    	|
 | simSlotIndex      	|  ❌  	|    ✅    	|
 | phoneNumber       	|  ❌  	|    ✅    	|
-| deviceId          	|  ❌  	|    ✅    	|
 | simSerialNumber   	|  ❌  	|    ✅    	|
 | subscriptionId    	|  ❌  	|    ✅    	|
 | allowsVOIP        	|  ✅  	|    ❌    	|
@@ -121,6 +120,10 @@ SimCardsManagerModule.setupEsim({
 
 
 ## Changelog
+
+### 1.0.1
+- Remove 'deviceID' on Android because it require high privilege
+- Adding permission management on Android (READ_PHONE_STATE)
 
 ### 1.0.0
 - First stable release
