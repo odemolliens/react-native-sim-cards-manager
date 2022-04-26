@@ -10,7 +10,7 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(getSimCards:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(getSimCardsNative:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
 
     NSMutableArray *simCardsList = [[NSMutableArray alloc]init];
     
