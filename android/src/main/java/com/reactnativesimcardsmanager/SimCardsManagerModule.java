@@ -56,7 +56,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
   @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
   @ReactMethod
-  public void getSimCards(Promise promise) {
+  public void getSimCardsNative(Promise promise) {
     WritableArray simCardsList = new WritableNativeArray();
 
     TelephonyManager telManager = (TelephonyManager) mReactContext.getSystemService(Context.TELEPHONY_SERVICE);
