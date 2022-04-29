@@ -149,7 +149,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
             // FIXME: review logic of resolve functions
             promise.resolve(3);
             PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3,
-                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_ONE_SHOT);
+                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
+                PendingIntent.FLAG_MUTABLE);
             mgr.startResolutionActivity(mReactContext.getCurrentActivity(), 3, intent, callbackIntent);
           } catch (Exception e) {
             promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error" + e.getLocalizedMessage());
