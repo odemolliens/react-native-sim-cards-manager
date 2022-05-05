@@ -2,6 +2,7 @@ package com.reactnativesimcardsmanager;
 
 import static android.content.Context.EUICC_SERVICE;
 
+import android.app.Activity;
 import android.os.Build;
 import android.telephony.euicc.EuiccManager;
 import com.facebook.react.bridge.*;
@@ -119,6 +120,37 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     return;
   }
 
+
+
+  @RequiresApi(api = Build.VERSION_CODES.P)
+  private void handleResolvableError(Promise promise, Intent intent) {
+    try {
+      // Resolvable error, attempt to resolve it by a user action
+      // FIXME: review logic of resolve functions
+      PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3,
+        new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
+          PendingIntent.FLAG_MUTABLE);
+
+      int resolutionRequestCode = 3;
+      mgr.startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
+      ActivityEventListener activityEventListener = new BaseActivityEventListener() {
+        @Override
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data){
+          if(requestCode == resolutionRequestCode) {
+            if(resultCode == Activity.RESULT_CANCELED) {
+              promise.reject("3", "Canceled by user");
+            } else if(resultCode == Activity.RESULT_OK) {
+              promise.resolve(true);
+            }
+          }
+        }
+      };
+      mReactContext.addActivityEventListener(activityEventListener);
+    } catch (Exception e) {
+      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error" + e.getLocalizedMessage());
+    }
+  }
+
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void setupEsim(ReadableMap config, Promise promise) {
@@ -141,20 +173,9 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
               "Can't setup eSim du to wrong Intent:" + intent.getAction()+" instead of "+ACTION_DOWNLOAD_SUBSCRIPTION);
           return;
         }
-
         int resultCode = getResultCode();
         if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgr != null) {
-          try {
-            // Resolvable error, attempt to resolve it by a user action
-            // FIXME: review logic of resolve functions
-            promise.resolve(3);
-            PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3,
-                new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
-                PendingIntent.FLAG_MUTABLE);
-            mgr.startResolutionActivity(mReactContext.getCurrentActivity(), 3, intent, callbackIntent);
-          } catch (Exception e) {
-            promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error" + e.getLocalizedMessage());
-          }
+          handleResolvableError(promise, intent);
         } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
           promise.resolve(true);
         } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
