@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -103,7 +104,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         promise.reject("0", "This functionality is not supported before Android 5.1 (22)");
       }
     } catch (Exception e) {
-      promise.reject("1", "Something goes wrong to fetch simcards:" + e.getLocalizedMessage());
+      String stackTrace = Log.getStackTraceString(e);
+      promise.reject("1", "Something goes wrong to fetch simcards: " + stackTrace);
     }
     promise.resolve(simCardsList);
   }
@@ -147,7 +149,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       };
       mReactContext.addActivityEventListener(activityEventListener);
     } catch (Exception e) {
-      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error" + e.getLocalizedMessage());
+      String stackTrace = Log.getStackTraceString(e);
+      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error " + stackTrace);
     }
   }
 
