@@ -68,7 +68,7 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
     if (@available(iOS 12.0, *)) {
         CTCellularPlanProvisioning *plan = [[CTCellularPlanProvisioning alloc] init];
         
-        if (plan.supportsCellularPlan != YES) {
+        if (plan.supportsCellularPlan == NO) {
             NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:2 userInfo:nil];
             reject(@"1", @"The device doesn't support a cellular plan", error);
         } else {
