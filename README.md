@@ -156,6 +156,10 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.4
+
+- Improve esim resolvable error
+
 ### 1.0.3
 
 - Fix bug with EMBEDDED_SUBSCRIPTION_RESULT_ERROR #12
