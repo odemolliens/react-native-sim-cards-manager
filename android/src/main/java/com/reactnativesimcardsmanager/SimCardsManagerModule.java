@@ -206,7 +206,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         mReactContext,
         0,
         new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
-        PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent.FLAG_UPDATE_CURRENT |
+          PendingIntent.FLAG_MUTABLE);
 
     mgr.downloadSubscription(sub, true, callbackIntent);
   }
