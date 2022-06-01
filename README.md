@@ -87,18 +87,18 @@ Available set of data per platform:
 
 | Platform          | iOS | Android |
 | ----------------- | --- | ------- |
-| carrierName       | ✅   | ✅       |
-| displayName       | ❌   | ✅       |
-| isoCountryCode    | ✅   | ✅       |
-| mobileCountryCode | ✅   | ✅       |
-| mobileNetworkCode | ✅   | ✅       |
-| isNetworkRoaming  | ❌   | ✅       |
-| isDataRoaming     | ❌   | ✅       |
-| simSlotIndex      | ❌   | ✅       |
-| phoneNumber       | ❌   | ✅       |
-| simSerialNumber   | ❌   | ✅       |
-| subscriptionId    | ❌   | ✅       |
-| allowsVOIP        | ✅   | ❌       |
+| carrierName       | ✅  | ✅      |
+| displayName       | ❌  | ✅      |
+| isoCountryCode    | ✅  | ✅      |
+| mobileCountryCode | ✅  | ✅      |
+| mobileNetworkCode | ✅  | ✅      |
+| isNetworkRoaming  | ❌  | ✅      |
+| isDataRoaming     | ❌  | ✅      |
+| simSlotIndex      | ❌  | ✅      |
+| phoneNumber       | ❌  | ✅      |
+| simSerialNumber   | ❌  | ✅      |
+| subscriptionId    | ❌  | ✅      |
+| allowsVOIP        | ✅  | ❌      |
 
 ### Esim is supported
 
@@ -155,6 +155,11 @@ SimCardsManagerModule.setupEsim({
 ```
 
 ## Changelog
+
+### 1.0.5
+
+- Fix bug with missing MUTABLE flag on intent for Android
+- Remove some useless logs
 
 ### 1.0.4
 
