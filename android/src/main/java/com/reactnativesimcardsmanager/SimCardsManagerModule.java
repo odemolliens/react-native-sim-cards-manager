@@ -44,8 +44,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
   @RequiresApi(api = Build.VERSION_CODES.P)
   private void initMgr() {
-    if(mgr == null) {
-        mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
+    if (mgr == null) {
+      mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
     }
   }
 
@@ -120,26 +120,24 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     return;
   }
 
-
-
   @RequiresApi(api = Build.VERSION_CODES.P)
   private void handleResolvableError(Promise promise, Intent intent) {
     try {
       // Resolvable error, attempt to resolve it by a user action
       // FIXME: review logic of resolve functions
       PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3,
-        new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
-          PendingIntent.FLAG_MUTABLE);
+          new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
+              PendingIntent.FLAG_MUTABLE);
 
       int resolutionRequestCode = 3;
       mgr.startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
       ActivityEventListener activityEventListener = new BaseActivityEventListener() {
         @Override
-        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data){
-          if(requestCode == resolutionRequestCode) {
-            if(resultCode == Activity.RESULT_CANCELED) {
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+          if (requestCode == resolutionRequestCode) {
+            if (resultCode == Activity.RESULT_CANCELED) {
               promise.reject("3", "Canceled by user");
-            } else if(resultCode == Activity.RESULT_OK) {
+            } else if (resultCode == Activity.RESULT_OK) {
               promise.resolve(true);
             }
           }
@@ -147,7 +145,17 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       };
       mReactContext.addActivityEventListener(activityEventListener);
     } catch (Exception e) {
-      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error " + e.getLocalizedMessage());
+      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error "
+          + e.getLocalizedMessage());
+    }
+  }
+
+  private boolean checkCarrierPrivileges() {
+    TelephonyManager telManager = (TelephonyManager) mReactContext.getSystemService(Context.TELEPHONY_SERVICE);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+      return telManager.hasCarrierPrivileges();
+    } else {
+      return false;
     }
   }
 
@@ -164,13 +172,19 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       return;
     }
 
+    if (!checkCarrierPrivileges()) {
+      promise.reject("1", "No carrier privileges detected");
+      return;
+    }
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
 
       @Override
       public void onReceive(Context context, Intent intent) {
         if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
           promise.reject("3",
-              "Can't setup eSim du to wrong Intent:" + intent.getAction()+" instead of "+ACTION_DOWNLOAD_SUBSCRIPTION);
+              "Can't setup eSim du to wrong Intent:" + intent.getAction() + " instead of "
+                  + ACTION_DOWNLOAD_SUBSCRIPTION);
           return;
         }
         int resultCode = getResultCode();
@@ -184,7 +198,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
               "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");
         } else {
           // Unknown Error
-          promise.reject("3", "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode));
+          promise.reject("3",
+              "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode));
         }
       }
     };
@@ -204,7 +219,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         0,
         new Intent(ACTION_DOWNLOAD_SUBSCRIPTION),
         PendingIntent.FLAG_UPDATE_CURRENT |
-          PendingIntent.FLAG_MUTABLE);
+            PendingIntent.FLAG_MUTABLE);
 
     mgr.downloadSubscription(sub, true, callbackIntent);
   }
