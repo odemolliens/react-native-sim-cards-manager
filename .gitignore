@@ -31,14 +31,15 @@ project.xcworkspace
 
 # Android/IJ
 #
-.classpath
-.cxx
-.gradle
 .idea
-.project
-.settings
-local.properties
-android.iml
+android/.classpath
+android/.cxx
+android/.gradle
+android/.idea
+android/.project
+android/.settings
+android/local.properties
+android/android.iml
 
 # Cocoapods
 #
