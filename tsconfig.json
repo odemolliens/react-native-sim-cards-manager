@@ -2,8 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-sim-cards-manager": ["./src/index"]
+      "react-native-sim-cards-manager": ["./index"]
     },
+    "declarationDir": "./types",
     "declaration": true,
     "esModuleInterop": true,
     "jsx": "react-native",
@@ -14,7 +15,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
-    "outDir": "./lib",
+    "outDir": "",
     "sourceMap": true,
     "strict": true,
     "target": "ESNext",
@@ -25,11 +26,11 @@
     "typeRoots": ["./node_modules/@types"] /* List of folders to include type definitions from. */
   },
   "include": [
-    "src/**/*",
     "example/**/*",
     "declarations.d.ts",
     "libs.d.ts",
-    "react-native.config.js"
+    "react-native.config.js",
+    "index.ts"
   ],
   "exclude": ["node_modules", "**/__tests__/*", "coverage", "babel.config.js"]
 }
