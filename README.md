@@ -156,9 +156,13 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.9
+
+- Improve package generation and add types declaration (one more time !)
+
 ### 1.0.8
 
-- Improve packge generation and add types declaration
+- Improve package generation and add types declaration
 
 ### 1.0.7
 
