@@ -30,6 +30,16 @@ Add in your Android Manifest:
           android:name="android.permission.READ_PHONE_STATE" />
 ```
 
+To use eSIM features, add in your Android Manifest:
+
+```xml
+<uses-permission
+          android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+```
+
+More info [here](https://source.android.com/devices/tech/connect/esim-euicc-api#download-sub)
+
+
 #### iOS
 
 **This API won't work without eSIM entitlement. You can read more about it [here](https://stackoverflow.com/a/60162323)**
