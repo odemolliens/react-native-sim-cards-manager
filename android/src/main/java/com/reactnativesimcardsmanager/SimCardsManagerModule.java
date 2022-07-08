@@ -125,25 +125,12 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     try {
       // Resolvable error, attempt to resolve it by a user action
       // FIXME: review logic of resolve functions
-      PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, 3,
+      int resolutionRequestCode = 3;
+      PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, resolutionRequestCode,
           new Intent(ACTION_DOWNLOAD_SUBSCRIPTION), PendingIntent.FLAG_UPDATE_CURRENT |
               PendingIntent.FLAG_MUTABLE);
 
-      int resolutionRequestCode = 3;
       mgr.startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
-      ActivityEventListener activityEventListener = new BaseActivityEventListener() {
-        @Override
-        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-          if (requestCode == resolutionRequestCode) {
-            if (resultCode == Activity.RESULT_CANCELED) {
-              promise.reject("3", "Canceled by user");
-            } else if (resultCode == Activity.RESULT_OK) {
-              promise.resolve(true);
-            }
-          }
-        }
-      };
-      mReactContext.addActivityEventListener(activityEventListener);
     } catch (Exception e) {
       promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error "
           + e.getLocalizedMessage());
@@ -172,10 +159,10 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       return;
     }
 
-    if (!checkCarrierPrivileges()) {
-      promise.reject("1", "No carrier privileges detected");
-      return;
-    }
+//    if (!checkCarrierPrivileges()) {
+//      promise.reject("1", "No carrier privileges detected");
+//      return;
+//    }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
 
