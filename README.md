@@ -60,7 +60,7 @@ Two methods are availabe :
 This handle the permission request and takes an optionnal _rationale_ Parameter
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.getSimCards({
   title: 'App Permission',
@@ -82,7 +82,7 @@ SimCardsManagerModule.getSimCards({
 This is the method used internally by getSimCards. It does not handle the permission request and leaves the user of this lib.
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.getSimCardsNative()
   .then((array: Array<any>) => {
@@ -115,7 +115,7 @@ Available set of data per platform:
 Return true/false is the device support eSim feature
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.isEsimSupported()
   .then((isSupported: boolean) => {
@@ -150,7 +150,7 @@ Error code that can be returned by the bridge:
 | 3 **(Android)** | The OS has returned an error **or** something goes wrong with the Intent/Activity |
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.setupEsim({
   confirmationCode,
