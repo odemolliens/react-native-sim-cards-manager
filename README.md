@@ -30,7 +30,12 @@ Add in your Android Manifest:
           android:name="android.permission.READ_PHONE_STATE" />
 ```
 
-To use eSIM features, add in your Android Manifest:
+
+
+To use eSIM features, **for regular apps**, please [follow this](https://source.android.com/docs/core/connect/esim-overview#carrier-privileges)
+
+
+To use eSIM features, **for system apps**, add in your Android Manifest:
 
 ```xml
 <uses-permission
