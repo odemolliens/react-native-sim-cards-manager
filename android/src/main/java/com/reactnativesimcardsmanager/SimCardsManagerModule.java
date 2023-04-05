@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
+import android.telephony.euicc.EuiccManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -169,13 +170,12 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           return;
         }
         int resultCode = getResultCode();
-//        if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgrWrapper.getMgr() != null) {
-//          handleResolvableError(promise, intent);
-//        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
-//          promise.resolve(true);
-//        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
+        if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mgrWrapper.getMgr() != null) {
+          handleResolvableError(promise, intent);
+        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
+          promise.resolve(true);
+        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
           // Embedded Subscription Error
-        if (true) {
           promise.reject("2",
               "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");
         } else {
