@@ -171,6 +171,11 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.11
+
+- **Fix** Android -  get phone number on API 33
+- Android - ```sendPhoneCall``` with phone number and sim slot index
+
 ### 1.0.10
 
 - **Fix** Fix issue when the OS requires user action
