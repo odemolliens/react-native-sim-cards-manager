@@ -3,7 +3,9 @@ package com.reactnativesimcardsmanager;
 import static android.content.Context.EUICC_SERVICE;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.telephony.euicc.EuiccManager;
 import com.facebook.react.bridge.*;
 import android.app.PendingIntent;
@@ -12,6 +14,8 @@ import android.telephony.euicc.DownloadableSubscription;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.content.BroadcastReceiver;
+import android.telecom.PhoneAccountHandle;
+import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -73,6 +77,13 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         for (SubscriptionInfo subInfo : subscriptionInfos) {
           WritableMap simCard = Arguments.createMap();
 
+          String number = "";
+          if(android.os.Build.VERSION.SDK_INT >= 33) {
+            number = manager.getPhoneNumber(subInfo.getSubscriptionId());
+          } else {
+            number = subInfo.getNumber();
+          } 
+
           CharSequence carrierName = subInfo.getCarrierName();
           String countryIso = subInfo.getCountryIso();
           int dataRoaming = subInfo.getDataRoaming(); // 1 is enabled ; 0 is disabled
@@ -80,7 +91,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           String iccId = subInfo.getIccId();
           int mcc = subInfo.getMcc();
           int mnc = subInfo.getMnc();
-          String number = subInfo.getNumber();
           int simSlotIndex = subInfo.getSimSlotIndex();
           int subscriptionId = subInfo.getSubscriptionId();
           int networkRoaming = telManager.isNetworkRoaming() ? 1 : 0;
@@ -106,6 +116,25 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       promise.reject("1", "Something goes wrong to fetch simcards: " + e.getLocalizedMessage());
     }
     promise.resolve(simCardsList);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.P)
+  @ReactMethod
+  public void sendPhoneCall(String phoneNumberString, int simSlotIndex) {
+    Uri uri = Uri.parse("tel:" + phoneNumberString.trim());
+    TelecomManager telecomManager =(TelecomManager) mReactContext.getSystemService(Context.TELECOM_SERVICE);
+    List<PhoneAccountHandle> list = telecomManager.getCallCapablePhoneAccounts();
+
+    PhoneAccountHandle accountHandle = null;
+    if (list != null) {
+      accountHandle = list.get(Math.min(simSlotIndex, list.size()));
+    }
+
+    if (accountHandle != null) {
+      Bundle extras = new Bundle();  
+      extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE,accountHandle);
+      telecomManager.placeCall(uri, extras);
+    }
   }
 
   @RequiresApi(api = Build.VERSION_CODES.P)
