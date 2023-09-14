@@ -171,6 +171,10 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.12
+
+- **Fix** npm package; missing index.ts file
+
 ### 1.0.11
 
 - **Fix** Android -  get phone number on API 33
