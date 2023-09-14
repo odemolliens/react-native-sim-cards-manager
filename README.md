@@ -139,8 +139,8 @@ Entry parameters for the bridge:
 | ---------------- | --------- | --------------------------------------------------------------------------------------------------------------- |
 | address          | N/A       | The address of the carrier network’s eSIM server                                                                |
 | confirmationCode | N/A       | The provisioning request’s confirmation code, provided by the network operator when initiating an eSIM download |
-| iccid            | N/A       | The provisioning request’s eUICC identifier                                                                     |
-| address          | N/A       | The provisioning request’s Integrated Circuit Card Identifier                                                   |
+| eid            | N/A       | The provisioning request’s eUICC identifier                                                                     |
+| iccid          | N/A       | The provisioning request’s Integrated Circuit Card Identifier                                                   |
 | matchingId       | N/A       | The provisioning request’s matching identifier                                                                  |
 | oid              | N/A       | The provisioning request’s Object Identifier                                                                    |
 
