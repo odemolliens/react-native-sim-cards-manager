@@ -171,7 +171,7 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
-### 1.0.12 & .13 & .14 & .15 & .16
+### 1.0.12 & .13 & .14 & .15 & .16 & .17
 
 - **Fix** npm package; missing index.ts file
 
