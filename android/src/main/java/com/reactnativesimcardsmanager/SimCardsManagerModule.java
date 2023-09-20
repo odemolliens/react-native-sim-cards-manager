@@ -161,7 +161,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
       mgr.startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
     } catch (Exception e) {
-      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim du to Activity error "
+      promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim due to Activity error "
           + e.getLocalizedMessage());
     }
   }
@@ -199,7 +199,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       public void onReceive(Context context, Intent intent) {
         if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
           promise.reject("3",
-              "Can't setup eSim du to wrong Intent:" + intent.getAction() + " instead of "
+              "Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of "
                   + ACTION_DOWNLOAD_SUBSCRIPTION);
           return;
         }
