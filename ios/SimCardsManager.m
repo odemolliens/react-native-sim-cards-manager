@@ -13,12 +13,12 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(getSimCardsNative:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
 
     NSMutableArray *simCardsList = [[NSMutableArray alloc]init];
-    
+
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc]init];
     if (@available(iOS 12.0, *)) {
         NSDictionary *providers = [networkInfo serviceSubscriberCellularProviders];
         NSMutableDictionary *simCard = [[NSMutableDictionary alloc]init];
-        
+
         for (NSString *aProvider in providers) {
             CTCarrier *aCarrier = providers[aProvider];
             [simCard setValue:[NSString stringWithFormat:@"%i",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
@@ -27,16 +27,16 @@ RCT_EXPORT_METHOD(getSimCardsNative:(RCTPromiseResolveBlock)resolve rejecter:(RC
             [simCard setValue:[aCarrier mobileNetworkCode] forKey:@"mobileNetworkCode"];
             [simCard setValue:[aCarrier mobileCountryCode] forKey:@"mobileCountryCode"];
         }
-        
+
         [simCardsList addObject: simCard];
-        
+
     } else {
         //Support for older version, can return only 1 simcard in the list (subscriberCellularProvider)
         NSMutableDictionary *simCard = [[NSMutableDictionary alloc]init];
-        
+
         CTTelephonyNetworkInfo *nInfo = [[CTTelephonyNetworkInfo alloc] init];
         CTCarrier *aCarrier = [nInfo subscriberCellularProvider];
-        
+
         //Catch no-sim case
         if([aCarrier isoCountryCode] != nil){
             [simCard setValue:[NSString stringWithFormat:@"%i",[aCarrier allowsVOIP]]forKey:@"allowsVOIP"];
@@ -61,27 +61,32 @@ RCT_EXPORT_METHOD(isEsimSupported:(RCTPromiseResolveBlock)resolve rejecter:(RCTP
     }
 }
 
+API_AVAILABLE(ios(12.0))
+CTCellularPlanProvisioning *plan;
+API_AVAILABLE(ios(12.0))
+CTCellularPlanProvisioningRequest *request;
+
 RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
                   promiseWithResolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     if (@available(iOS 12.0, *)) {
-        CTCellularPlanProvisioning *plan = [[CTCellularPlanProvisioning alloc] init];
-        
+        plan = [[CTCellularPlanProvisioning alloc] init];
+
         if (plan.supportsCellularPlan == NO) {
             NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:2 userInfo:nil];
             reject(@"1", @"The device doesn't support a cellular plan", error);
         } else {
-            CTCellularPlanProvisioningRequest *request = [[CTCellularPlanProvisioningRequest alloc] init];
+            request = [[CTCellularPlanProvisioningRequest alloc] init];
             request.OID = config[@"oid"];
             request.EID = config[@"eid"];
             request.ICCID = config[@"iccid"];
             request.address = config[@"address"];
             request.matchingID = config[@"matchingId"];
             request.confirmationCode = config[@"confirmationCode"];
-            
+
             UIBackgroundTaskIdentifier backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{}];
-            
+
             [plan addPlanWith:request completionHandler:^(CTCellularPlanProvisioningAddPlanResult result) {
                 if (result==CTCellularPlanProvisioningAddPlanResultFail){
                     NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
@@ -96,7 +101,7 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
                 [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
             }];
         }
-        
+
     } else {
         NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
         reject(@"0", @"This functionality is not supported before iOS 12.0", error);
