@@ -171,6 +171,11 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.18
+
+- **Fix** fix setupEsim. check for OS version P or above, before continuing and return if below. 
+- Moved initMgr() to after the version check.
+
 ### 1.0.12 & .13 & .14 & .15 & .16 & .17
 
 - **Fix** npm package; missing index.ts file

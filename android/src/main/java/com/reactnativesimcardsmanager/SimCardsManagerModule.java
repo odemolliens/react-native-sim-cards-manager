@@ -184,6 +184,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       return;
     }
 
+    initMgr();
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mgr != null && !mgr.isEnabled()) {
       promise.reject("1", "The device doesn't support a cellular plan (EuiccManager is not available)");
       return;
@@ -193,7 +195,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 //      promise.reject("1", "No carrier privileges detected");
 //      return;
 //    }
-    initMgr();
+
     BroadcastReceiver receiver = new BroadcastReceiver() {
 
       @Override
