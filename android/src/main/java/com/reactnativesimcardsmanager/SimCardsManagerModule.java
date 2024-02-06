@@ -225,7 +225,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
    // Changes for registering reciever for Android 14
    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      mReactContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), RECEIVER_EXPORTED);
+      mReactContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), RECEIVER_NOT_EXPORTED);
     }else {
       mReactContext.registerReceiver(
               receiver,
