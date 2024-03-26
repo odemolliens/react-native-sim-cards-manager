@@ -171,6 +171,12 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.19
+
+- **Fix** for Android 13 READ_PHONE_NUMBERS
+- **Fix** for Android 14 registerReceiver()
+- **Fix** iOS result success
+
 ### 1.0.18
 
 - **Fix** fix setupEsim. check for OS version P or above, before continuing and return if below. 
