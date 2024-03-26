@@ -223,11 +223,16 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       }
     };
 
-    mReactContext.registerReceiver(
-        receiver,
-        new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION),
-        null,
-        null);
+   // Changes for registering reciever for Android 14
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      mReactContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), RECEIVER_NOT_EXPORTED);
+    }else {
+      mReactContext.registerReceiver(
+              receiver,
+              new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION),
+              null,
+              null);
+    }
 
     DownloadableSubscription sub = DownloadableSubscription.forActivationCode(
         /* Passed from react side */
