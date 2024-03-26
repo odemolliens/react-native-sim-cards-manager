@@ -90,8 +90,8 @@ RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
                     NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:1 userInfo:nil];
                     reject(@"3", @"CTCellularPlanProvisioningAddPlanResultUnknown - Can't setup eSim due to unknown error", error);
                 }else{
-                    //CTCellularPlanProvisioningAddPlanResultSuccess
-                    resolve(@(true));
+                    //CTCellularPlanProvisioningAddPlanResultSuccess or CTCellularPlanProvisioningAddPlanResultCancel
+                    resolve(@(result == CTCellularPlanProvisioningAddPlanResultSuccess));
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
             }];
