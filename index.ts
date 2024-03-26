@@ -19,16 +19,27 @@ const SimCardsManagerModule = NativeModules.SimCardsManager
 
 export async function requestCellularNetworkPermission(then: () => any, rationale?: Rationale) {
   if (Platform.OS == 'android') {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
-      rationale ?? {
-        title: 'App Permission',
-        message: 'App needs access to get informations of your cellular network',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
+    let granted = PermissionsAndroid.RESULTS.DENIED;
+    if(Platform.Version >= 33){ 
+        granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS, 
+          rationale ?? { 
+            title: 'App Permission', 
+            message: 'App needs access to get informations of your cellular network', 
+            buttonNeutral: 'Ask Me Later', 
+            buttonNegative: 'Cancel', 
+            buttonPositive: 'OK', 
+          }); 
       }
-    );
+      granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE, 
+        rationale ?? { 
+          title: 'App Permission', 
+          message: 'App needs access to get informations of your cellular network', 
+          buttonNeutral: 'Ask Me Later', 
+          buttonNegative: 'Cancel', 
+          buttonPositive: 'OK', 
+        }); 
+
     console.log(granted);
     console.log(PermissionsAndroid.RESULTS);
     if (
