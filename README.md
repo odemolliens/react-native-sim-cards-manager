@@ -171,7 +171,7 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
-### 1.0.19
+### 1.0.20
 
 - **Fix** for Android 13 READ_PHONE_NUMBERS
 - **Fix** for Android 14 registerReceiver()
