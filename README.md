@@ -171,6 +171,20 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.22
+
+- **Fix** Android flag MUTABLE to IMMUTABLE to solve a Android 14 issue
+
+### 1.0.21
+
+- **Fix** an issue introduced in 1.0.20
+
+### 1.0.20
+
+- **Fix** for Android 13 READ_PHONE_NUMBERS
+- **Fix** for Android 14 registerReceiver()
+- **Fix** iOS result success
+
 ### 1.0.20
 
 - **Fix** for Android 13 READ_PHONE_NUMBERS
