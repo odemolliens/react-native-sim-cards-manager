@@ -15,6 +15,14 @@ Bugs fixed and some improvements have been made.
 npm install react-native-sim-cards-manager
 ```
 
+### Debug
+
+### Android
+In order to debug the device during the setup of the eSIM to obtain more detailed logs, please use the following command to filter the logs:
+```shell
+adb logcat | grep "Euicc"
+```
+
 ### Permissions
 
 #### Android
@@ -43,6 +51,8 @@ To use eSIM features, **for system apps**, add in your Android Manifest:
 ```
 
 More info [here](https://source.android.com/devices/tech/connect/esim-euicc-api#download-sub)
+
+
 
 
 #### iOS
