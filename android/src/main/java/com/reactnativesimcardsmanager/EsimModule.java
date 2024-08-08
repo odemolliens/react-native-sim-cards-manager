@@ -20,8 +20,12 @@ public class EsimModule {
 
   @RequiresApi(api = Build.VERSION_CODES.P)
   public EuiccManager getMgr() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P || mgr == null) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
       return null;
+    }
+
+    if (mgr != null) {
+      return mgr;
     }
 
     mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
