@@ -82,7 +82,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
             number = manager.getPhoneNumber(subInfo.getSubscriptionId());
           } else {
             number = subInfo.getNumber();
-          } 
+          }
 
           CharSequence carrierName = subInfo.getCarrierName();
           String countryIso = subInfo.getCountryIso();
@@ -131,7 +131,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     }
 
     if (accountHandle != null) {
-      Bundle extras = new Bundle();  
+      Bundle extras = new Bundle();
       extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE,accountHandle);
       telecomManager.placeCall(uri, extras);
     }
@@ -140,8 +140,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void isEsimSupported(Promise promise) {
-    initMgr();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mgr != null) {
+      initMgr();
       promise.resolve(mgr.isEnabled());
     } else {
       promise.resolve(false);
@@ -178,7 +178,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void setupEsim(ReadableMap config, Promise promise) {
-    
+
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.P) {
       promise.reject("0", "EuiccManager is not available or before Android 9 (API 28)");
       return;
@@ -186,7 +186,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
     initMgr();
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mgr != null && !mgr.isEnabled()) {
+    if (mgr != null && !mgr.isEnabled()) {
       promise.reject("1", "The device doesn't support a cellular plan (EuiccManager is not available)");
       return;
     }
