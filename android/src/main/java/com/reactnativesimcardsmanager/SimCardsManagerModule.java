@@ -1,8 +1,5 @@
 package com.reactnativesimcardsmanager;
 
-import static android.content.Context.EUICC_SERVICE;
-
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +16,6 @@ import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -37,20 +33,12 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   public static final String NAME = "SimCardsManager";
   private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
   private ReactContext mReactContext;
-
-  @RequiresApi(api = Build.VERSION_CODES.P)
-  private EuiccManager mgr;
+  private EsimModule mEsimModule;
 
   public SimCardsManagerModule(ReactApplicationContext reactContext) {
     super(reactContext);
     mReactContext = reactContext;
-  }
-
-  @RequiresApi(api = Build.VERSION_CODES.P)
-  private void initMgr() {
-    if (mgr == null) {
-      mgr = (EuiccManager) mReactContext.getSystemService(EUICC_SERVICE);
-    }
+    mEsimModule = new EsimModule(reactContext);
   }
 
   @Override
@@ -140,9 +128,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void isEsimSupported(Promise promise) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mgr != null) {
-      initMgr();
-      promise.resolve(mgr.isEnabled());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && mEsimModule.getMgr() != null) {
+      promise.resolve(mEsimModule.getMgr().isEnabled());
     } else {
       promise.resolve(false);
     }
@@ -159,7 +146,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           intent, PendingIntent.FLAG_UPDATE_CURRENT |
               PendingIntent.FLAG_MUTABLE);
 
-      mgr.startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
+      mEsimModule.getMgr().startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
     } catch (Exception e) {
       promise.reject("3", "EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR - Can't setup eSim due to Activity error "
           + e.getLocalizedMessage());
@@ -184,9 +171,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       return;
     }
 
-    initMgr();
-
-    if (mgr != null && !mgr.isEnabled()) {
+    if (mEsimModule.getMgr() != null && !mEsimModule.getMgr().isEnabled()) {
       promise.reject("1", "The device doesn't support a cellular plan (EuiccManager is not available)");
       return;
     }
@@ -246,6 +231,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         PendingIntent.FLAG_UPDATE_CURRENT |
             PendingIntent.FLAG_MUTABLE);
 
-    mgr.downloadSubscription(sub, true, callbackIntent);
+    mEsimModule.getMgr().downloadSubscription(sub, true, callbackIntent);
   }
 }
