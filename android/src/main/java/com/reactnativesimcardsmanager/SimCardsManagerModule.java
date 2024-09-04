@@ -142,9 +142,12 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       // Resolvable error, attempt to resolve it by a user action
       // FIXME: review logic of resolve functions
       int resolutionRequestCode = 3;
-      PendingIntent callbackIntent = PendingIntent.getBroadcast(mReactContext, resolutionRequestCode,
-          intent, PendingIntent.FLAG_UPDATE_CURRENT |
-              PendingIntent.FLAG_MUTABLE);
+      PendingIntent callbackIntent = PendingIntent.getBroadcast(
+        mReactContext, 
+        resolutionRequestCode,
+        intent, 
+        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+      );
 
       mEsimModule.getMgr().startResolutionActivity(mReactContext.getCurrentActivity(), resolutionRequestCode, intent, callbackIntent);
     } catch (Exception e) {
@@ -208,10 +211,10 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
       }
     };
 
-   // Changes for registering reciever for Android 14
+   // Changes for registering receiver for Android 14
    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       mReactContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), Context.RECEIVER_NOT_EXPORTED);
-    }else {
+    } else {
       mReactContext.registerReceiver(
               receiver,
               new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION),
@@ -228,8 +231,8 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
         mReactContext,
         0,
         intent,
-        PendingIntent.FLAG_UPDATE_CURRENT |
-            PendingIntent.FLAG_MUTABLE);
+        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+    );
 
     mEsimModule.getMgr().downloadSubscription(sub, true, callbackIntent);
   }
