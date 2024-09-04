@@ -181,6 +181,11 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.23
+
+- **Fix** Create Pending Intent with mutable flag to receive EUICC manager callback on Android 14 by @raffiot in #77
+- **Fix** crash on android < sdk 28 by @MargusSalk in #83
+
 ### 1.0.22
 
 - **Fix** Android flag MUTABLE to IMMUTABLE to solve a Android 14 issue
