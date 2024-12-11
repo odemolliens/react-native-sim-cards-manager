@@ -181,6 +181,10 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
+### 1.0.25
+
+- **Fix** Fix iOS LPA returning unknown before finishing esim setup by @Neeal20 in #91
+
 ### 1.0.24
 
 - **Fix** Create Pending Intent with mutable flag to receive EUICC manager callback on Android 14 by @raffiot in #77
