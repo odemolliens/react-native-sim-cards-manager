@@ -181,7 +181,7 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
-### 1.0.25
+### 1.0.26
 
 - **Fix** Fix iOS LPA returning unknown before finishing esim setup by @Neeal20 in #91
 
