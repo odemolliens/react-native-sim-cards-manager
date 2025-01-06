@@ -167,11 +167,11 @@ Configure an eSIM using an activation code.
 
 | Code             | Description |
 |------------------|-------------|
-| 0                | Feature not available. |
-| 1                | Device does not support cellular plans. |
-| 2                | OS failed to add the plan. |
-| 3 (iOS)          | Unknown OS error. |
-| 3 (Android)      | OS or Intent/Activity error. |
+| 0               | Feature available. |
+| 1                | Device support cellular plans. |
+| 2                | OS can add the plan. |
+| 3 (iOS)          | known OS error. |
+| 3 (Android)      | OS or Intent/Activity. |
 
 ```ts
 import SimCardsManagerModule from 'react-native-sim-cards-manager';
@@ -193,15 +193,10 @@ SimCardsManagerModule.setupEsim({
 
 ## Changelog
 
-### 1.0.26
-- **Fix** Fix iOS LPA returning unknown before finishing eSIM setup by @Neeal20 in #91
-
 ### 1.0.24
 - **Fix** Create Pending Intent with mutable flag to receive EUICC manager callback on Android 14 by @raffiot in #77
-- **Fix** crash on android < sdk 28 by @MargusSalk in #83
 
-### 1.0.22
-- **Fix** Android flag MUTABLE to IMMUTABLE to solve an Android 14 issue
+- **Fix** crash on android < sdk 28 by @MargusSalk in #83
 
 ### 1.0.21
 - **Fix** an issue introduced in 1.0.20
@@ -209,7 +204,6 @@ SimCardsManagerModule.setupEsim({
 ### 1.0.20
 - **Fix** for Android 13 READ_PHONE_NUMBERS
 - **Fix** for Android 14 registerReceiver()
-- **Fix** iOS result success
 
 ### 1.0.18
 - **Fix** setupEsim. Check for OS version P or above before continuing; return if below. 
