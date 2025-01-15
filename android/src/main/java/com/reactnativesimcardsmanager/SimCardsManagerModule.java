@@ -74,7 +74,7 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 
           CharSequence carrierName = subInfo.getCarrierName();
           String countryIso = subInfo.getCountryIso();
-          int dataRoaming = subInfo.getDataRoaming(); // 1 is enabled ; 0 is disabled
+          int dataRoaming = subInfo.getDataRoaming(); // 1 is enabled; 0 is disabled
           CharSequence displayName = subInfo.getDisplayName();
           String iccId = subInfo.getIccId();
           int mcc = subInfo.getMcc();
@@ -82,9 +82,14 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
           int simSlotIndex = subInfo.getSimSlotIndex();
           int subscriptionId = subInfo.getSubscriptionId();
           int networkRoaming = telManager.isNetworkRoaming() ? 1 : 0;
-
-          simCard.putString("carrierName", carrierName.toString());
-          simCard.putString("displayName", displayName.toString());
+          
+          // Safely handle potential null values
+          String safeCarrierName = (carrierName != null) ? carrierName.toString() : "Unknown Carrier";
+          String safeDisplayName = (displayName != null) ? displayName.toString() : "Unknown Display Name";
+          
+          // Store values in simCard
+          simCard.putString("carrierName", safeCarrierName);
+          simCard.putString("displayName", safeDisplayName);
           simCard.putString("isoCountryCode", countryIso);
           simCard.putInt("mobileCountryCode", mcc);
           simCard.putInt("mobileNetworkCode", mnc);
