@@ -191,12 +191,6 @@ SimCardsManagerModule.setupEsim({
 
 ---
 
-## 📝 Changelog
-
-[Changelog content remains unchanged]  
-
----
-
 ## 👨‍💻 Contributing
 
 Read the [Contributing Guide](CONTRIBUTING.md) for details on how to contribute to the project.
