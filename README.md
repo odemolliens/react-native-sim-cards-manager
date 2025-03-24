@@ -1,66 +1,85 @@
-# react-native-sim-cards-manager
+# 📱 react-native-sim-cards-manager
 
-A new library that merge multiple sim cards libraries into a single one:
+A unified library merging features from multiple SIM card management libraries:
 
-- https://github.com/markneh/react-native-esim
-- https://github.com/pocesar/react-native-sim-data
+- [react-native-esim](https://github.com/markneh/react-native-esim)
+- [react-native-sim-data](https://github.com/pocesar/react-native-sim-data)
 
-Bridges have been adapted, so you will have to adapt your code if you come from one of those libraries.
+---
 
-Bugs fixed and some improvements have been made.
+## 🚀 Why use this library?
 
-## Installation
+✅ Unified APIs for eSIM and SIM data management.  
+✅ Bug fixes and enhancements for improved stability.  
+✅ Simplified transition from previous libraries (requires some code adaptation).  
+
+---
+
+## 📦 Installation
+
+Install the package using npm:
 
 ```sh
 npm install react-native-sim-cards-manager
 ```
 
-### Permissions
+---
 
-#### Android
+## 🛠 Debugging
 
-**Minimum API Level is 22**
+### Android
 
-_TelephonyManager_ require Android permission **READ_PHONE_STATE**:
+To debug device logs during eSIM setup, use the following command:
 
-Add in your Android Manifest:
-
-```xml
-<uses-permission
-          android:name="android.permission.READ_PHONE_STATE" />
+```sh
+adb logcat | grep "Euicc"
 ```
 
-To use eSIM features, add in your Android Manifest:
+---
+
+## 🔐 Permissions
+
+### Android
+
+- **Minimum API Level:** 22  
+- Add the following permission in `AndroidManifest.xml` for `TelephonyManager`:
 
 ```xml
-<uses-permission
-          android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 ```
 
-More info [here](https://source.android.com/devices/tech/connect/esim-euicc-api#download-sub)
+For **eSIM features**:
 
+- For regular apps, follow the instructions in the [carrier privileges guide](https://source.android.com/docs/core/connect/esim-overview#carrier-privileges).
+- For system apps, include the following permission:
 
-#### iOS
+```xml
+<uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+```
 
-**This API won't work without eSIM entitlement. You can read more about it [here](https://stackoverflow.com/a/60162323)**
+More details [here](https://source.android.com/devices/tech/connect/esim-euicc-api#download-sub).
 
-**Minimum API Level is 12 for eSIM methods**
+### iOS
 
-Note: At the moment _(iOS 14.2)_ there might a bug in iOS SDK which returns uknown result before eSIM setup completion. More about it [here](https://developer.apple.com/forums/thread/662001)
+- **Minimum API Level:** 12 (eSIM features)  
+- Requires eSIM entitlement. Learn more [here](https://stackoverflow.com/a/60162323).  
 
-## Usage
+⚠️ **Note:** As of iOS 14.2, there is a known bug where an unknown result may be returned before completing eSIM setup. Details [here](https://developer.apple.com/forums/thread/662001).
 
-### Get sim cards
+---
 
-The list can be empty (no simcards detected) or one/many element(s)
-Two methods are availabe :
+## 📖 Usage
 
-#### Method getSimCards
+### 📲 Retrieve SIM Cards
 
-This handle the permission request and takes an optionnal _rationale_ Parameter
+Fetch a list of SIM cards. The result may contain no elements (if no SIM cards are detected) or multiple entries.
+
+#### 📌 Method: `getSimCards`
+
+Handles permission requests and accepts an optional `_rationale_` parameter.
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.getSimCards({
   title: 'App Permission',
@@ -70,33 +89,33 @@ SimCardsManagerModule.getSimCards({
   buttonPositive: 'OK',
 })
   .then((array: Array<any>) => {
-    //
+    // Handle results
   })
   .catch((error) => {
-    //
+    // Handle errors
   });
 ```
 
-#### Method getSimCardsNative
+#### 📌 Method: `getSimCardsNative`
 
-This is the method used internally by getSimCards. It does not handle the permission request and leaves the user of this lib.
+Used internally by `getSimCards`. Does not handle permissions.
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.getSimCardsNative()
   .then((array: Array<any>) => {
-    //
+    // Handle results
   })
   .catch((error) => {
-    //
+    // Handle errors
   });
 ```
 
-Available set of data per platform:
+#### 📊 Available Data
 
-| Platform          | iOS | Android |
-| ----------------- | --- | ------- |
+| Field             | iOS | Android |
+| ------------------|-----|---------|
 | carrierName       | ✅  | ✅      |
 | displayName       | ❌  | ✅      |
 | isoCountryCode    | ✅  | ✅      |
@@ -110,119 +129,76 @@ Available set of data per platform:
 | subscriptionId    | ❌  | ✅      |
 | allowsVOIP        | ✅  | ❌      |
 
-### Esim is supported
+---
 
-Return true/false is the device support eSim feature
+### 🔍 eSIM Support Check
+
+Verify if the device supports eSIM functionality.
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.isEsimSupported()
   .then((isSupported: boolean) => {
-    //
+    // Handle result
   })
   .catch((error) => {
-    //
+    // Handle errors
   });
 ```
 
-### Setup eSim with an activation code
+---
 
-Entry parameters for the bridge:
+### ⚙️ eSIM Setup
 
-| Entry parameters | Mandatory | Description                                                                                                     |
-| ---------------- | --------- | --------------------------------------------------------------------------------------------------------------- |
-| address          | N/A       | The address of the carrier network’s eSIM server                                                                |
-| confirmationCode | N/A       | The provisioning request’s confirmation code, provided by the network operator when initiating an eSIM download |
-| iccid            | N/A       | The provisioning request’s eUICC identifier                                                                     |
-| address          | N/A       | The provisioning request’s Integrated Circuit Card Identifier                                                   |
-| matchingId       | N/A       | The provisioning request’s matching identifier                                                                  |
-| oid              | N/A       | The provisioning request’s Object Identifier                                                                    |
+Configure an eSIM using an activation code.
 
-Error code that can be returned by the bridge:
+#### 📌 Parameters
 
-| Error code      | Description                                                                       |
-| --------------- | --------------------------------------------------------------------------------- |
-| 0               | Feature not available for that OS / device                                        |
-| 1               | The device doesn't support a cellular plan                                        |
-| 2               | The OS failed to add the new plan                                                 |
-| 3 **(iOS)**     | The OS has returned an unknow error                                               |
-| 3 **(Android)** | The OS has returned an error **or** something goes wrong with the Intent/Activity |
+| Field            | Mandatory | Description |
+|------------------|-----------|-------------|
+| address          | N/A       | Carrier network's eSIM server address. |
+| confirmationCode | N/A       | Confirmation code for eSIM provisioning. |
+| eid              | N/A       | eUICC identifier. |
+| iccid            | N/A       | Integrated Circuit Card Identifier. |
+| matchingId       | N/A       | Matching identifier for the eSIM profile. |
+| oid              | N/A       | Object Identifier for the provisioning request. |
+
+#### ⚠️ Error Codes
+
+| Code             | Description |
+|------------------|-------------|
+| 0                | Feature not available. |
+| 1                | Device does not support cellular plans. |
+| 2                | OS failed to add the plan. |
+| 3 (iOS)          | Unknown OS error. |
+| 3 (Android)      | OS or Intent/Activity error. |
 
 ```ts
-import { SimManager } from 'react-native-sim-cards-manager';
+import SimCardsManagerModule from 'react-native-sim-cards-manager';
 
 SimCardsManagerModule.setupEsim({
   confirmationCode,
   address: '',
 })
   .then((isPlanAdded: boolean) => {
-    //
+    // Handle success
   })
   .catch((error) => {
-    //
+    // Handle errors
   });
 ```
 
-## Changelog
+---
 
-### 1.0.10
+## 👨‍💻 Contributing
 
-- **Fix** Fix issue when the OS requires user action
+Read the [Contributing Guide](CONTRIBUTING.md) for details on how to contribute to the project.
 
-### 1.0.9
+---
 
-- Improve package generation and add types declaration (one more time !)
+## 📜 License
 
-### 1.0.8
+MIT License.
 
-- Improve package generation and add types declaration
-
-### 1.0.7
-
-- Upgrade packages (detected CVE)
-
-### 1.0.6
-
-- Added an extra check on eSim method for Android (hasCarrierPrivileges())
-
-### 1.0.5
-
-- Fix bug with missing MUTABLE flag on intent for Android
-- Remove some useless logs
-
-### 1.0.4
-
-- Improve esim resolvable error
-
-### 1.0.3
-
-- Fix bug with EMBEDDED_SUBSCRIPTION_RESULT_ERROR #12
-
-### 1.0.2
-
-- Remove 'deviceID' on Android because it require high privilege
-- Adding permission management on Android (READ_PHONE_STATE)
-
-### 1.0.1
-
-- Android bug fixes
-
-### 1.0.0
-
-- First stable release
-
-### 0.9.9
-
-- iOS implementation
-- Android implementation
-- RN implementation
-- Documentation & sample project
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
+---

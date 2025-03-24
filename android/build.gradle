@@ -18,10 +18,10 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion safeExtGet('SimCardsManager_compileSdkVersion', 31)
+    compileSdkVersion safeExtGet('SimCardsManager_compileSdkVersion', 33)
     defaultConfig {
         minSdkVersion safeExtGet('SimCardsManager_minSdkVersion', 16)
-        targetSdkVersion safeExtGet('SimCardsManager_targetSdkVersion', 31)
+        targetSdkVersion safeExtGet('SimCardsManager_targetSdkVersion', 33)
         versionCode 1
         versionName "1.0"
 
