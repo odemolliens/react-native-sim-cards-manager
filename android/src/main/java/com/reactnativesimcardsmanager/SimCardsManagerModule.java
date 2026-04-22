@@ -31,9 +31,10 @@ import java.util.List;
 @ReactModule(name = SimCardsManagerModule.NAME)
 public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   public static final String NAME = "SimCardsManager";
-  private String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
+  private static final String ACTION_DOWNLOAD_SUBSCRIPTION = "download_subscription";
   private ReactContext mReactContext;
   private EsimModule mEsimModule;
+  private BroadcastReceiver mDownloadReceiver;
 
   public SimCardsManagerModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -144,8 +145,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   private void handleResolvableError(Promise promise, Intent intent) {
     try {
-      // Resolvable error, attempt to resolve it by a user action
-      // FIXME: review logic of resolve functions
       int resolutionRequestCode = 3;
       PendingIntent callbackIntent = PendingIntent.getBroadcast(
         mReactContext,
@@ -161,6 +160,15 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
     }
   }
 
+  private void unregisterReceiver() {
+    if (mDownloadReceiver != null) {
+      try {
+        mReactContext.unregisterReceiver(mDownloadReceiver);
+      } catch (IllegalArgumentException ignored) {}
+      mDownloadReceiver = null;
+    }
+  }
+
   private boolean checkCarrierPrivileges() {
     TelephonyManager telManager = (TelephonyManager) mReactContext.getSystemService(Context.TELEPHONY_SERVICE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -173,7 +181,6 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
   @RequiresApi(api = Build.VERSION_CODES.P)
   @ReactMethod
   public void setupEsim(ReadableMap config, Promise promise) {
-
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.P) {
       promise.reject("0", "EuiccManager is not available or before Android 9 (API 28)");
       return;
@@ -189,56 +196,54 @@ public class SimCardsManagerModule extends ReactContextBaseJavaModule {
 //      return;
 //    }
 
-    BroadcastReceiver receiver = new BroadcastReceiver() {
+    unregisterReceiver();
+
+    mDownloadReceiver = new BroadcastReceiver() {
+      private boolean isHandled = false;
 
       @Override
       public void onReceive(Context context, Intent intent) {
-        boolean rejected = false;
-        String code = "";
-        String error = "";
-        if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(intent.getAction())) {
-          rejected = true;
-          code = "3";
-          error = "Can't setup eSim due to wrong Intent:" + intent.getAction() + " instead of "
-            + ACTION_DOWNLOAD_SUBSCRIPTION;
-        }
+        if (isHandled) return;
+
         int resultCode = getResultCode();
+        String action = intent != null ? intent.getAction() : null;
+
+        if (!ACTION_DOWNLOAD_SUBSCRIPTION.equals(action)) {
+          isHandled = true;
+          unregisterReceiver();
+          promise.reject("3",
+              "Can't setup eSim due to wrong Intent:" + action + " instead of "
+                  + ACTION_DOWNLOAD_SUBSCRIPTION);
+          return;
+        }
+
         if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_RESOLVABLE_ERROR && mEsimModule.getMgr() != null) {
           handleResolvableError(promise, intent);
-        } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
+          return;
+        }
+
+        isHandled = true;
+        unregisterReceiver();
+
+        if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) {
           promise.resolve(true);
         } else if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_ERROR) {
-          // Embedded Subscription Error
-          rejected = true;
-          code = "2";
-          error = "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription";
+          promise.reject("2",
+              "EMBEDDED_SUBSCRIPTION_RESULT_ERROR - Can't add an Esim subscription");
         } else {
-          // Unknown Error
-          rejected = true;
-          code = "3";
-          error = "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode);
-        }
-        // Unregister receiver
-        if (rejected) {
-          promise.reject(code, error);
-          mReactContext.unregisterReceiver(this);
+          promise.reject("3",
+              "Can't add an Esim subscription due to unknown error, resultCode is:" + String.valueOf(resultCode));
         }
       }
     };
 
-   // Changes for registering receiver for Android 14
-   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      mReactContext.registerReceiver(receiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), Context.RECEIVER_NOT_EXPORTED);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      mReactContext.registerReceiver(mDownloadReceiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), Context.RECEIVER_NOT_EXPORTED);
     } else {
-      mReactContext.registerReceiver(
-              receiver,
-              new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION),
-              null,
-              null);
+      mReactContext.registerReceiver(mDownloadReceiver, new IntentFilter(ACTION_DOWNLOAD_SUBSCRIPTION), null, null);
     }
 
     DownloadableSubscription sub = DownloadableSubscription.forActivationCode(
-        /* Passed from react side */
         config.getString("confirmationCode"));
 
     Intent intent = new Intent(ACTION_DOWNLOAD_SUBSCRIPTION).setPackage(mReactContext.getPackageName());
